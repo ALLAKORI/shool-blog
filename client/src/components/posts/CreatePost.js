@@ -26,19 +26,32 @@ const CreatePost = () => {
 
   const [post, setPost] = useState({
     title: '',
-    content: ''
+    content: '',
+    image: null
   });
 
-  const { title, content } = post;
+  const { title, content, image } = post;
 
-  const onChange = e => setPost({ ...post, [e.target.name]: e.target.value });
+  const onChange = e => {
+    if (e.target.name === 'image') {
+      setPost({ ...post, image: e.target.files[0] });
+    } else {
+      setPost({ ...post, [e.target.name]: e.target.value });
+    }
+  };
 
   const onSubmit = e => {
     e.preventDefault();
     if (title.trim() === '' || content.trim() === '') {
       setAlert('Please fill in both title and content', 'danger');
     } else {
-      addPost(post);
+      // Create a formData object to send the post data including the image
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      if (image) formData.append('image', image);
+
+      addPost(formData); // Call addPost to handle the form submission
       setAlert('Post Created Successfully', 'success');
       navigate('/');
     }
@@ -80,6 +93,17 @@ const CreatePost = () => {
                 />
               </Form.Group>
 
+              {/* Champ pour télécharger l'image */}
+              <Form.Group className="mb-3" controlId="image">
+                <Form.Label>Post Image</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={onChange}
+                />
+              </Form.Group>
+
               <Button variant="primary" type="submit" className="w-100">
                 Create Post
               </Button>
@@ -91,4 +115,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost; 
+export default CreatePost;

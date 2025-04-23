@@ -14,7 +14,7 @@ const Post = ({ post }) => {
   const { comments } = commentContext;
   const { deletePost, likePost, unlikePost } = postContext;
 
-  const { _id, title, content, date, author, likes } = post;
+  const { _id, title, content, date, author, likes, image } = post;
 
   // Format date
   const formatDate = (dateString) => {
@@ -60,6 +60,11 @@ const Post = ({ post }) => {
         <Link to={`/posts/${_id}`}>
           <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-primary-600">{title}</h2>
         </Link>
+
+        {/* Affichage de l'image si elle existe */}
+        {image && (
+          <img src={image} alt={title} className="w-full h-64 object-cover mb-4" />
+        )}
         
         <div className="prose prose-sm max-w-none text-gray-700 mb-4">
           <p>{content.length > 200 ? content.substring(0, 200) + '...' : content}</p>
@@ -98,4 +103,4 @@ Post.propTypes = {
   post: PropTypes.object.isRequired,
 };
 
-export default Post; 
+export default Post;

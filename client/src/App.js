@@ -9,6 +9,9 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import PostDetail from './components/posts/PostDetail';
 import NotFound from './components/pages/NotFound';
+import NewsPage from './components/pages/NewsPage';
+import AnnouncementsPage from './components/pages/AnnouncementsPage';
+import ChatPage from './components/pages/ChatPage';
 
 // Context
 import AuthState from './context/auth/AuthState';
@@ -28,14 +31,14 @@ if (localStorage.token) {
 // Initialize user on app load
 const AppInitializer = () => {
   const context = useContext(authContext);
-  
+
   useEffect(() => {
     if (localStorage.token) {
       context.loadUser();
     }
     // eslint-disable-next-line
   }, []);
-  
+
   return null;
 };
 
@@ -56,6 +59,9 @@ const App = () => {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/posts/:id" element={<PostDetail />} />
+                    <Route path="/actualites" element={<NewsPage />} />
+                    <Route path="/annonces" element={<AnnouncementsPage />} />
+                    <Route path="/chat" element={<ChatPage />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </main>
@@ -68,4 +74,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;

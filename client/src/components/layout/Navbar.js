@@ -4,8 +4,7 @@ import AuthContext from '../../context/auth/authContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const authContext = useContext(AuthContext);
-  const { isAuthenticated, logout, user } = authContext;
+  const { isAuthenticated, logout, user } = useContext(AuthContext);
 
   const onLogout = () => {
     logout();
@@ -15,146 +14,87 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const menuLinks = (
+    <>
+      <Link to="/" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Accueil</Link>
+      <Link to="/actualites" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Actualités</Link>
+      <Link to="/annonces" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Annonces</Link>
+      <Link to="/chat" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Chat</Link>
+    </>
+  );
+
   const authLinks = (
     <>
-      <div className="hidden md:block flex-1">
-        <div className="ml-10 flex items-baseline space-x-4">
-          <Link to="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-            Home
-          </Link>
-        </div>
-      </div>
-      
-      <div className="hidden md:block">
-        <div className="ml-4 flex items-center md:ml-6">
-          <div className="ml-3 relative">
-            <div>
-              <button 
-                type="button" 
-                className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                onClick={toggleMenu}
-              >
-                <span className="text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
-                  {user && user.name}
-                </span>
-              </button>
-            </div>
-            
-            {isOpen && (
-              <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <button
-                  onClick={onLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className="hidden md:flex space-x-4 items-center">
+        {menuLinks}
+        <span className="text-gray-300 text-sm">Bienvenue, {user && user.name}</span>
+        <button onClick={onLogout} className="text-red-400 hover:text-red-600 text-sm">Déconnexion</button>
       </div>
     </>
   );
 
   const guestLinks = (
     <>
-      <div className="hidden md:block flex-1">
-        <div className="ml-10 flex items-baseline space-x-4">
-          <Link to="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-            Home
-          </Link>
-        </div>
-      </div>
-      
-      <div className="hidden md:block">
-        <div className="ml-4 flex items-center space-x-2">
-          <Link to="/login" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-            Login
-          </Link>
-          
-          <Link to="/register" className="bg-gray-700 text-white hover:bg-gray-600 px-3 py-2 rounded-md text-sm font-medium">
-            Register
-          </Link>
-        </div>
+      <div className="hidden md:flex space-x-4 items-center">
+        {menuLinks}
+        <Link to="/login" className="text-gray-300 hover:text-white text-sm">Connexion</Link>
+        <Link to="/register" className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-500">Inscription</Link>
       </div>
     </>
   );
 
-  // Mobile menu
   const mobileMenu = (
-    <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
-      <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <Link to="/" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-          Home
-        </Link>
-        
-        {isAuthenticated ? (
-          <button
-            onClick={onLogout}
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium"
-          >
-            Logout
-          </button>
-        ) : (
-          <>
-            <Link to="/login" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-              Login
-            </Link>
-            
-            <Link to="/register" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-              Register
-            </Link>
-          </>
-        )}
-      </div>
+    <div className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-gray-800 px-2 pt-2 pb-3 space-y-1`}>
+      {menuLinks}
+      {isAuthenticated ? (
+        <>
+          <span className="block text-gray-300 px-3">Bienvenue, {user && user.name}</span>
+          <button onClick={onLogout} className="block text-left text-red-400 hover:text-red-600 px-3">Déconnexion</button>
+        </>
+      ) : (
+        <>
+          <Link to="/login" className="block text-gray-300 hover:text-white px-3">Connexion</Link>
+          <Link to="/register" className="block text-white bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded-md">Inscription</Link>
+        </>
+      )}
     </div>
   );
 
   return (
-    <nav className="bg-gray-800">
+    <nav className="bg-gray-800 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center">
-              <img 
-                src="/ensa.png" 
-                alt="ENSA Logo" 
-                className="h-8 w-auto mr-2"
-              />
-              <span className="text-white text-lg font-bold">School Blog</span>
-            </Link>
-          </div>
-          
-          <div className="flex-1 flex justify-between items-center">
+        <div className="flex justify-between h-16 items-center">
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="/ensa.png" alt="ENSA Logo" className="h-8 w-8" />
+            <span className="text-white font-bold text-lg">School Blog</span>
+          </Link>
+
+          <div className="flex items-center">
             {isAuthenticated ? authLinks : guestLinks}
-          </div>
-          
-          <div className="-mr-2 flex md:hidden">
-            <button
-              onClick={toggleMenu}
-              type="button"
-              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              {!isOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
-            </button>
+
+            <div className="md:hidden ml-2">
+              <button
+                onClick={toggleMenu}
+                type="button"
+                className="text-gray-300 hover:text-white focus:outline-none"
+              >
+                {isOpen ? (
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      
       {mobileMenu}
     </nav>
   );
 };
 
-export default Navbar; 
+export default Navbar;

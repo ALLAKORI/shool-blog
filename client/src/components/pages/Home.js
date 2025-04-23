@@ -4,6 +4,7 @@ import Post from '../posts/Post';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import Spinner from '../layout/Spinner';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const postContext = useContext(PostContext);
@@ -17,10 +18,12 @@ const Home = () => {
   // State for new post form
   const [newPost, setNewPost] = useState({
     title: '',
-    content: ''
+    summary: '',
+    content: '',
+    image: null
   });
 
-  const { title, content } = newPost;
+  const { title, summary, content, image } = newPost;
 
   useEffect(() => {
     if (localStorage.token) {
@@ -36,14 +39,22 @@ const Home = () => {
 
   const onChange = e => setNewPost({ ...newPost, [e.target.name]: e.target.value });
 
+  const onFileChange = e => setNewPost({ ...newPost, image: e.target.files[0] });
+
   const onSubmit = e => {
     e.preventDefault();
-    if (title.trim() === '' || content.trim() === '') {
-      setAlert('Please fill in both title and content', 'danger');
+    if (title.trim() === '' || content.trim() === '' || !image) {
+      setAlert('Please fill in all fields including image', 'danger');
     } else {
-      addPost(newPost);
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('summary', summary);
+      formData.append('content', content);
+      formData.append('image', image);
+
+      addPost(formData); // API call to add post
       setAlert('Post Created Successfully', 'success');
-      setNewPost({ title: '', content: '' });
+      setNewPost({ title: '', summary: '', content: '', image: null });
     }
   };
 
@@ -61,9 +72,20 @@ const Home = () => {
                   name="title"
                   value={title}
                   onChange={onChange}
-                  className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 text-gray-700 border rounded-lg"
                   required
                 />
+              </div>
+              <div className="mb-4">
+                <textarea
+                  placeholder="Summary"
+                  name="summary"
+                  value={summary}
+                  onChange={onChange}
+                  rows="2"
+                  className="w-full px-3 py-2 text-gray-700 border rounded-lg"
+                  required
+                ></textarea>
               </div>
               <div className="mb-4">
                 <textarea
@@ -71,15 +93,24 @@ const Home = () => {
                   name="content"
                   value={content}
                   onChange={onChange}
-                  rows="3"
-                  className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  rows="4"
+                  className="w-full px-3 py-2 text-gray-700 border rounded-lg"
                   required
                 ></textarea>
+              </div>
+              <div className="mb-4">
+                <input
+                  type="file"
+                  name="image"
+                  onChange={onFileChange}
+                  className="w-full px-3 py-2 text-gray-700 border rounded-lg"
+                  required
+                />
               </div>
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
                 >
                   Post
                 </button>
@@ -96,7 +127,23 @@ const Home = () => {
         ) : (
           <div className="space-y-6">
             {posts.map(post => (
-              <Post key={post._id} post={post} />
+              <div key={post._id} className="bg-white shadow rounded-lg overflow-hidden">
+                <img
+                  src={post.imageUrl}
+                  alt={post.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-bold">{post.title}</h3>
+                  <p className="text-gray-600 mt-2">{post.summary}</p>
+                  <Link
+                    to={`/posts/${post._id}`}
+                    className="text-blue-500 hover:underline mt-4 inline-block"
+                  >
+                    Voir plus
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -105,4 +152,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;

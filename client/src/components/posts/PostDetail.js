@@ -29,7 +29,7 @@ const PostDetail = () => {
     return <Spinner />;
   }
 
-  const { title, content, date, author, likes } = current;
+  const { title, content, date, author, likes, imageUrl, summary } = current;
 
   // Format date
   const formatDate = (dateString) => {
@@ -73,8 +73,19 @@ const PostDetail = () => {
         )}
         
         <div className="p-6">
+          {/* Affichage de l'image du post */}
+          {imageUrl && (
+            <img src={imageUrl} alt={title} className="w-full h-64 object-cover rounded-lg mb-4" />
+          )}
+
           <h1 className="text-2xl font-bold text-gray-900 mb-6">{title}</h1>
           
+          {/* Affichage du résumé (Summary) */}
+          {summary && (
+            <p className="text-gray-600 mb-6">{summary}</p>
+          )}
+
+          {/* Affichage du contenu détaillé */}
           <div className="prose max-w-none mb-8 text-gray-700">
             {content}
           </div>
@@ -117,4 +128,4 @@ const PostDetail = () => {
   );
 };
 
-export default PostDetail; 
+export default PostDetail;

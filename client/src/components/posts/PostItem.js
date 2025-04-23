@@ -12,7 +12,7 @@ const PostItem = ({ post }) => {
   const { deletePost } = postContext;
   const { isAuthenticated, user } = authContext;
   
-  const { _id, title, content, date, author } = post;
+  const { _id, title, content, date, author, image } = post;
 
   // Format date
   const formatDate = (dateString) => {
@@ -48,12 +48,20 @@ const PostItem = ({ post }) => {
         <Card.Subtitle className="mb-2 text-muted">
           Posted by {author ? author.name : 'Unknown User'} on {formatDate(date)}
         </Card.Subtitle>
+
+        {/* Affichage de l'image du post si elle existe */}
+        {image && (
+          <Card.Img variant="top" src={image} alt={title} className="mb-3" />
+        )}
+        
         <Card.Text>
           {truncateContent(content)}
         </Card.Text>
+        
         <LinkContainer to={`/posts/${_id}`}>
           <Button variant="primary" size="sm" className="me-2">Read More</Button>
         </LinkContainer>
+
         {isAuthenticated && user && author && author._id === user._id && (
           <Button onClick={onDelete} variant="danger" size="sm">
             <i className="fas fa-trash"></i> Delete
@@ -68,4 +76,4 @@ PostItem.propTypes = {
   post: PropTypes.object.isRequired
 };
 
-export default PostItem; 
+export default PostItem;
