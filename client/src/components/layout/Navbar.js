@@ -24,23 +24,19 @@ const Navbar = () => {
   );
 
   const authLinks = (
-    <>
-      <div className="hidden md:flex space-x-4 items-center">
-        {menuLinks}
-        <span className="text-gray-300 text-sm">Bienvenue, {user && user.name}</span>
-        <button onClick={onLogout} className="text-red-400 hover:text-red-600 text-sm">Déconnexion</button>
-      </div>
-    </>
+    <div className="flex space-x-4 items-center">
+      {menuLinks}
+      <span className="text-gray-300 text-sm">Bienvenue, {user && user.name}</span>
+      <button onClick={onLogout} className="text-red-400 hover:text-red-600 text-sm">Déconnexion</button>
+    </div>
   );
 
   const guestLinks = (
-    <>
-      <div className="hidden md:flex space-x-4 items-center">
-        {menuLinks}
-        <Link to="/login" className="text-gray-300 hover:text-white text-sm">Connexion</Link>
-        <Link to="/register" className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-500">Inscription</Link>
-      </div>
-    </>
+    <div className="flex space-x-4 items-center">
+      {menuLinks}
+      <Link to="/login" className="text-gray-300 hover:text-white text-sm">Connexion</Link>
+      <Link to="/register" className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-500">Inscription</Link>
+    </div>
   );
 
   const mobileMenu = (
@@ -63,32 +59,37 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/ensa.png" alt="ENSA Logo" className="h-8 w-8" />
-            <span className="text-white font-bold text-lg">School Blog</span>
-          </Link>
+        <div className="flex justify-between items-center h-16 w-full">
+          {/* Logo à gauche */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="flex items-center space-x-2">
+              <img src="/ensa.png" alt="ENSA Logo" className="h-8 w-8" />
+              <span className="text-white font-bold text-lg">School Blog</span>
+            </Link>
+          </div>
 
-          <div className="flex items-center">
+          {/* Liens au centre (visible uniquement sur desktop) */}
+          <div className="hidden md:flex flex-1 justify-center">
             {isAuthenticated ? authLinks : guestLinks}
+          </div>
 
-            <div className="md:hidden ml-2">
-              <button
-                onClick={toggleMenu}
-                type="button"
-                className="text-gray-300 hover:text-white focus:outline-none"
-              >
-                {isOpen ? (
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
-              </button>
-            </div>
+          {/* Menu burger (mobile) à droite */}
+          <div className="md:hidden">
+            <button
+              onClick={toggleMenu}
+              type="button"
+              className="text-gray-300 hover:text-white focus:outline-none"
+            >
+              {isOpen ? (
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>

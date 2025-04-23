@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';import { Row, Col, Spinner } from 'react-bootstrap';
-import PostItem from './PostItem'; // Composant pour afficher chaque post
+import PostItem from '../posts/PostItem'; // Composant pour afficher chaque post
 
 const NewsPage = () => {
   const [posts, setPosts] = useState([]);
